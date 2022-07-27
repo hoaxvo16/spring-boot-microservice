@@ -14,8 +14,8 @@ import com.example.springrestapi.services.interfaces.DelegateService;
 public class ConsumerServiceImpl implements ConsumerService {
 
     @Autowired
-    @Qualifier("orderDelegateService")
-    private DelegateService orderDelegateService;
+    @Qualifier("catalogDelegateService")
+    private DelegateService catalogDelegateService;
 
     @RabbitListener(queues = RabbitMQConfig.QUEUE_NAME)
     @Override
@@ -25,8 +25,8 @@ public class ConsumerServiceImpl implements ConsumerService {
             String routingKey = message.getRoutingKey();
             String[] splitStrings = routingKey.split("\\.");
             switch (splitStrings[1]) {
-                case "order":
-                    orderDelegateService.receiveAction(splitStrings[0], splitStrings[2], message);
+                case "catalog":
+                    catalogDelegateService.receiveAction(splitStrings[0], splitStrings[2], message);
                     break;
             }
 
